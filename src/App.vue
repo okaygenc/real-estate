@@ -1,9 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-12">
-                Header
-            </div>
+            <Header />
         </div>
         <div class="row">
             <div class="col-lg-3">
@@ -18,10 +16,12 @@
 
 <script>
 import Menu from './components/Menu';
+import Header from './components/Header';
 export default {
     name: 'App',
     components: {
-        Menu
+        Menu,
+        Header
     }
 }
 </script>

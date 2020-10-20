@@ -1,8 +1,23 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue';
+import App from './App';
+import VueRouter from 'vue-router';
+import Home from './pages/home/Home.vue';
+import Appointments from './pages/appointments/Appointments';
+import CreateAppointments from './pages/createAppointment/CreateAppointment';
 
-Vue.config.productionTip = false
 
+Vue.use(VueRouter);
+
+
+export const router = new VueRouter({
+    mode: 'history',
+    routes: [
+        {path: '/', component: Home},
+        {path: '/appointments', component: Appointments},
+        {path: '/create-appointment', component: CreateAppointments}
+    ]
+})
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+    router,
+    render: h => h(App)
+}).$mount('#app');

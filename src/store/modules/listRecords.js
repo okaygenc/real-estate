@@ -11,13 +11,14 @@ const getters = {
 };
 
 const actions = {
-    async fetchRecords() {
+    async fetchRecords({ commit }) {
         const response = await api.fetchRecords();
-        console.log(response)
+        commit('setRecords', response.data.records);
+        console.log(response.data.records)
     }
 }
 
-const muttations = {
+const mutations = {
     setRecords:(state, records) => {
         state.listOfRecords = records;
     }
@@ -27,5 +28,5 @@ export default {
     state,
     getters,
     actions,
-    muttations
+    mutations,
 }

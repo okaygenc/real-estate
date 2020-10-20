@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import App from './App';
+import store from './store';
 import VueRouter from 'vue-router';
 import Home from './pages/home/Home.vue';
 import Appointments from './pages/appointments/Appointments';
@@ -18,6 +19,7 @@ export const router = new VueRouter({
     ]
 })
 new Vue({
+    store,
     router,
     render: h => h(App)
 }).$mount('#app');

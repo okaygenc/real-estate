@@ -1,13 +1,13 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
-import ListOfRecords from './modules/listRecords';
-import listAgents from './modules/listAgents';
+import Appointments from './modules/appointments';
+import Agents from './modules/agents';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        ListOfRecords,
-        listAgents
+        Appointments,
+        Agents
     }
 })

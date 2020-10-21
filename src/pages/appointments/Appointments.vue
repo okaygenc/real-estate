@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="table-responsive" v-if="allRecords.length">
+        <div class="table-responsive" v-if="allAppointments.length">
             <table class="table">
-                <caption>List of records</caption>
+                <caption>List of appointments</caption>
                 <thead>
                     <tr>
                         <th scope="col">Agent Id</th>
@@ -19,18 +19,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="record in allRecords" :record="record" :key="record.id">
-                        <td>{{record.fields.agent_id[0]}}</td>
-                        <td>{{record.fields.agent_name[0]}}</td>
-                        <td>{{record.fields.agent_surname[0]}}</td>
-                        <td>{{record.fields.appointment_date}}</td>
-                        <td>{{record.fields.appointment_id}}</td>
-                        <td>{{record.fields.appointment_postcode}}</td>
-                        <td>{{record.fields.contact_email[0]}}</td>
-                        <td>{{record.fields.contact_id[0]}}</td>
-                        <td>{{record.fields.contact_name[0]}}</td>
-                        <td>{{record.fields.contact_phone[0]}}</td>
-                        <td>{{record.fields.contact_surname[0]}}</td>
+                    <tr v-for="appointment in allAppointments" :appointment="appointment" :key="appointment.id">
+                        <td>{{appointment.fields.agent_id[0]}}</td>
+                        <td>{{appointment.fields.agent_name[0]}}</td>
+                        <td>{{appointment.fields.agent_surname[0]}}</td>
+                        <td>{{appointment.fields.appointment_date}}</td>
+                        <td>{{appointment.fields.appointment_id}}</td>
+                        <td>{{appointment.fields.appointment_postcode}}</td>
+                        <td>{{appointment.fields.contact_email[0]}}</td>
+                        <td>{{appointment.fields.contact_id[0]}}</td>
+                        <td>{{appointment.fields.contact_name[0]}}</td>
+                        <td>{{appointment.fields.contact_phone[0]}}</td>
+                        <td>{{appointment.fields.contact_surname[0]}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -43,10 +43,10 @@
 import { mapActions, mapGetters } from 'vuex';
 export default {
     name: 'appointments',
-    methods: mapActions(['fetchRecords']),
-    computed: mapGetters(['allRecords']),
+    methods: mapActions(['fetchAppointments']),
+    computed: mapGetters(['allAppointments']),
     created() {
-        this.fetchRecords();
+        this.fetchAppointments();
     }
 }
 </script>

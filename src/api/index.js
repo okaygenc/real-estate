@@ -5,7 +5,7 @@ const ROOT_URL = "https://api.airtable.com/v0/appgykZBGTF92MnHu";
 const API_KEY = "keyNSO2Is7ewJV2jV";
 
 export default {
-    fetchRecords() {
+    fetchAppointments() {
         const querystring = {
             maxRecords: 3,
             view: "Grid view"

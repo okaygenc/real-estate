@@ -71,14 +71,14 @@ export default {
     },
     computed: mapGetters(['allAgents']),
     methods: {
-        ...mapActions(['fetchAgents']),
+        ...mapActions(['fetchAgents', 'createAppointment']),
         onInput(e) {
             const { name, value } = e.target;
             this.$set(this.formData, name, value);
 
         },
         sendForm() {
-            console.log(this.formData);
+            this.createAppointment(this.formData);
         }
     },
     created() {

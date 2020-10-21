@@ -37,6 +37,8 @@ export default {
                 "contact_phone": contact_phone,
               }
         }
+        console.log(formData);
+        console.log(data)
         // return axios.post(`${ROOT_URL}/Contacts`, formData, {
         //     headers: {
         //         Authorization: `Bearer ${API_KEY}`,
@@ -60,7 +62,9 @@ export default {
               }
         }
 
-        console.log('form Data')
+        console.log(formData);
+        console.log(data);
+        console.log(response)
 
         // return axios.post(`${ROOT_URL}/Appointments`, formData, {
         //     headers: {

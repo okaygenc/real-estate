@@ -4,7 +4,7 @@
             <div class="col-lg-4">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Appointment Date</label>
-                    <date-picker v-model="formData.appointment_date" type="datetime" :show-second="false"></date-picker>
+                    <date-picker v-model="formData.appointment_date" type="datetime" show-second="false"></date-picker>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -49,12 +49,21 @@
         <div class="row">
             <div class="col-lg-12"> <button type="submit" class="btn btn-primary" @click="sendForm">Save</button></div>
         </div>
+        {{formData}}
+        <Plan 
+            v-if="formData.appointment_date && formData.appointment_postcode" 
+            :date="formData.appointment_date"
+            :postCode="formData.appointment_postcode"
+        />
+        <Map @postCodeReady="postCodeReady" />
     </div>
 </template>
 
 <script>
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
+import Map from './Map';
+import Plan from './Plan';
 
 import { mapActions, mapGetters } from 'vuex';
 export default {
@@ -72,7 +81,7 @@ export default {
             },
         }
     },
-    components: { DatePicker },
+    components: { DatePicker, Map, Plan },
     computed: mapGetters(['allAgents']),
     methods: {
         ...mapActions(['fetchAgents', 'createAppointment']),
@@ -83,6 +92,9 @@ export default {
         },
         sendForm() {
             this.createAppointment(this.formData);
+        },
+        postCodeReady(code) {
+            this.$set(this.formData, "appointment_postcode", code);
         }
     },
     created() {

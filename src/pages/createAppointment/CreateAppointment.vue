@@ -4,7 +4,7 @@
             <div class="col-lg-4">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Appointment Date</label>
-                    <input type="text" class="form-control" placeholder="Appointment Date" @input="onInput" name="appointment_date">
+                    <date-picker v-model="formData.appointment_date" type="datetime" :show-second="false"></date-picker>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -53,22 +53,26 @@
 </template>
 
 <script>
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+
 import { mapActions, mapGetters } from 'vuex';
 export default {
     name:'createAppointment',
     data() {
         return {
             formData: {
-                appointment_date: '',
+                appointment_date: null,
                 appointment_postcode: '',
                 agent_id: '',
                 contact_name: '',
                 contact_surname: '',
                 contact_email: '',
-                contact_phone: '',
+                contact_phone: ''
             },
         }
     },
+    components: { DatePicker },
     computed: mapGetters(['allAgents']),
     methods: {
         ...mapActions(['fetchAgents', 'createAppointment']),
@@ -86,3 +90,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+.mx-datepicker{
+    width: 100%!important;
+}
+</style>

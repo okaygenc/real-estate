@@ -37,40 +37,31 @@ export default {
                 "contact_phone": contact_phone,
               }
         }
-        console.log(formData);
-        console.log(data)
-        // return axios.post(`${ROOT_URL}/Contacts`, formData, {
-        //     headers: {
-        //         Authorization: `Bearer ${API_KEY}`,
-        //         'Content-Type': 'application/json'
-        //     }
-        // })
+
+        return axios.post(`${ROOT_URL}/Contacts`, formData, {
+            headers: {
+                Authorization: `Bearer ${API_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        })
     },
     createAppointment(data, response) {
         let formData = {
             "fields": {
-                "appointment_date": "2014-09-05T07:00:00.000Z",
-                "appointment_postcode": "cm38eq",
-                "contact_id": [
-                  "recEdMpDdR4mffG5x",
-                  "recAGYX923sgQFPaS",
-                  "recVxUzK9U3XK16BG"
-                ],
+                "appointment_date": data.appointment_date,
+                "appointment_postcode": data.appointment_postcode,
+                "contact_id": [response.data.id],
                 "agent_id": [
-                  "recD6wT8LhxUZ0rxK"
+                  data.agent_id
                 ],
-              }
+            }
         }
 
-        console.log(formData);
-        console.log(data);
-        console.log(response)
-
-        // return axios.post(`${ROOT_URL}/Appointments`, formData, {
-        //     headers: {
-        //         Authorization: `Bearer ${API_KEY}`,
-        //         'Content-Type': 'application/json'
-        //     }
-        // })
+        return axios.post(`${ROOT_URL}/Appointments`, formData, {
+            headers: {
+                Authorization: `Bearer ${API_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        })
     }
 }

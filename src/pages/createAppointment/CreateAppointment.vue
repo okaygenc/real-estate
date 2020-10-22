@@ -11,7 +11,7 @@
                 <div class="form-group">
                     <label for="exampleFormControlSelect1">Select Agent</label>
                     <select class="form-control" v-model="formData.agent_id">
-                        <option v-for="agent in allAgents.records" :agent="agent" :key="agent.fields.agent_id" :value="agent.agent_id">{{agent.fields.agent_name}} {{agent.fields.agent_surname}}</option>
+                        <option v-for="agent in allAgents.records" :agent="agent" :key="agent.fields.agent_id" :value="agent.id">{{agent.fields.agent_name}} {{agent.fields.agent_surname}}</option>
                     </select>
                 </div>
             </div>
@@ -66,13 +66,14 @@ export default {
         return {
             formData: {
                 appointment_date: null,
-                appointment_postcode: '',
-                agent_id: '',
-                contact_name: '',
-                contact_surname: '',
-                contact_email: '',
-                contact_phone: ''
+                appointment_postcode: null,
+                agent_id: null,
+                contact_name: null,
+                contact_surname: null,
+                contact_email: null,
+                contact_phone: null
             },
+            deneme: "a"
         }
     },
     components: { DatePicker, Map, Plan },
@@ -84,7 +85,15 @@ export default {
             this.$set(this.formData, name, value);
         },
         sendForm() {
-            this.createAppointment(this.formData);
+            const { appointment_date, appointment_postcode, agent_id, contact_name, contact_surname, contact_email, contact_phone } = this.formData;
+            
+            if(appointment_date == null || agent_id == null || contact_name == null || contact_surname == null || contact_email == null || contact_phone == null) {
+                this.$swal({icon: 'warning', text: 'Please fill out all fields'});
+            } else if(appointment_postcode == null) {
+                this.$swal({icon: 'warning', text: 'Please select location from map'});
+            } else {
+                this.createAppointment(this.formData);
+            }
         },
         postCodeReady(code) {
             this.$set(this.formData, "appointment_postcode", code);
@@ -96,7 +105,7 @@ export default {
 }
 </script>
 <style scoped>
-.mx-datepicker{
-    width: 100%!important;
-}
+    .mx-datepicker{
+        width: 100%!important;
+    }
 </style>

@@ -1,4 +1,5 @@
 import api from '../../api';
+import { router } from '../../main';
 
 const state = {
     listOfAppointments: []
@@ -14,20 +15,14 @@ const actions = {
     async fetchAppointments({ commit }) {
         const response = await api.fetchAppointments();
         commit('setAppointments', response.data.records);
-        console.log(response.data.records)
     },
 
-    /* eslint-disable */
-    async createAppointment({ commit }, data) {
-        console.log('ilk yer');
-        console.log(data)
-
+    async createAppointment(data) {
         const response = await api.createContact(data);
-        console.log(response);
         const appointmentResponse = await api.createAppointment(data, response);
-        console.log(appointmentResponse)
+        // programmatic navigation
+        router.push('/');
     }
-    /* eslint-enable */ 
 }
 
 const mutations = {

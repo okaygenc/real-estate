@@ -1,5 +1,5 @@
 <template>
-    <div ref="map" style="height: 300px"></div>
+    <div ref="map" class="map"></div>
 </template>
 
 <script>
@@ -40,14 +40,16 @@ export default {
                             .short_name;
 
                         if (country !== "GB") {
-                            window.alert("You can not select any location outside of United Kingdom");
+                            this.$swal({icon: 'warning', text: 'You can not select any location outside of United Kingdom'});
+                        } else {
+                            return this.$emit("postCodeReady", postCode);
                         }
-
-                        this.$emit("postCodeReady", postCode);
                     } catch (e) {
                         console.error(e);
-                        window.alert("No results found.");
+                        this.$swal({icon: 'warning', text: 'No results found.'});
                     }
+
+                    this.$emit("postCodeReady", null);
                 }
             );
         });
@@ -60,3 +62,9 @@ export default {
     }
 }
 </script>
+<style scoped>
+    .map {
+        height: 300px;
+        margin-bottom: 30px;
+    }
+</style>

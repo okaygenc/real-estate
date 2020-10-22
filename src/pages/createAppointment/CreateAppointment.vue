@@ -4,13 +4,7 @@
             <div class="col-lg-4">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Appointment Date</label>
-                    <date-picker v-model="formData.appointment_date" type="datetime" show-second="false"></date-picker>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Appointment Postcode</label>
-                    <input type="text" class="form-control" placeholder="Appointment Postcode" @input="onInput" name="appointment_postcode">
+                    <date-picker v-model="formData.appointment_date" type="datetime" :show-second="false"></date-picker>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -46,16 +40,16 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12"> <button type="submit" class="btn btn-primary" @click="sendForm">Save</button></div>
-        </div>
-        {{formData}}
         <Plan 
             v-if="formData.appointment_date && formData.appointment_postcode" 
             :date="formData.appointment_date"
             :postCode="formData.appointment_postcode"
         />
+        <b>Appointment Postcode:</b>
         <Map @postCodeReady="postCodeReady" />
+        <div class="row">
+            <div class="col-lg-12"> <button type="submit" class="btn btn-primary" @click="sendForm">Save</button></div>
+        </div>
     </div>
 </template>
 
@@ -88,7 +82,6 @@ export default {
         onInput(e) {
             const { name, value } = e.target;
             this.$set(this.formData, name, value);
-
         },
         sendForm() {
             this.createAppointment(this.formData);

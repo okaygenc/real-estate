@@ -4,17 +4,18 @@
             Calculating travel distance and durations...
         </div>
         <div v-else>
+            <p class="info">Plan Info:</p>
             <div>
-                Distance between agency and appointment location is <strong>3km (~17 minutes by car)</strong>
+                Distance between agency and appointment location is <strong>{{ this.distanceTo }} (~{{ this.durationToText }} drive)</strong>
             </div>
             <div>
-                Estimated time to leave office: <strong>17:30</strong>
+                Estimated time to leave office: <strong>{{ this.timeToLeaveText }}</strong>
             </div>
             <div>
                 Appointment duration: <strong>1 hour</strong>
             </div>
             <div>
-                Estimated time to back at office: <strong>19:30</strong>
+                Estimated time to back at office: <strong>{{ this.timeToBeBackText }}</strong>
             </div>
         </div>
     </div>
@@ -31,16 +32,16 @@ export default {
     data() {
         return {
             loading: true,
-            distance: null,
-            durationTo: null,
-            durationFrom: null
+            distanceTo: null,
+            durationToText: null,
+            timeToLeaveText: null,
+            timeToBeBackText: null
         };
     },
-    watch() {
-        return {
-            postCode: this.refresh,
-            date: this.refresh
-        };
+    watch: {
+        //
+        postCode() { this.refresh() },
+        date() { this.refresh() },
     },
     methods: {
         refresh() {
@@ -58,12 +59,27 @@ export default {
             }, ({ rows }) => {
                 this.loading = false;
 
+                // From office to appointment seconds
+                const durationTo = rows[0].elements[0].duration;
+                // From appointment to office seconds
+                const durationFrom = rows[1].elements[1].duration;
+
+                const appointmentTimestamp = new Date(this.date).getTime();
+                const timeToLeaveTimestamp = appointmentTimestamp - durationTo.value * 1000;
+                const timeToBeBackTimestamp = appointmentTimestamp + 1000 * 60 * 60 + durationFrom.value * 1000; // Add 1 hour for appointment and the way back
+
                 this.distanceTo = rows[0].elements[0].distance.text;
-                this.durationTo = rows[0].elements[0].duration.value;
-                this.durationFrom = rows[0].elements[0].duration.value;
+                this.durationToText = durationTo.text;
+                this.timeToLeaveText = new Date(timeToLeaveTimestamp).toLocaleTimeString();
+                this.timeToBeBackText = new Date(timeToBeBackTimestamp).toLocaleTimeString();
             });
-            console.log(office, appointment)
         }
     }
 }
 </script>
+<style scoped>
+    .info {
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>

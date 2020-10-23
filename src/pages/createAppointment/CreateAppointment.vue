@@ -56,7 +56,7 @@
             <b>Appointment Postcode:</b>
             <Map @postCodeReady="postCodeReady"/>
             </div>
-            <SendButton text="Gonder"  @sendForm="tryToSend"/>
+            <SendButton :text="editForm ? 'Edit Data' : 'Save Data'"  @sendForm="tryToSend"/>
         </div>
     </div>
 </template>

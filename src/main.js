@@ -18,7 +18,8 @@ export const router = new VueRouter({
     routes: [
         {path: '/', component: Home},
         {path: '/appointments', component: Appointments},
-        {path: '/create-appointment', component: CreateAppointments}
+        {path: '/create-appointment', component: CreateAppointments},
+        {path: '/edit-appointment', name:"edit-appointment", component: CreateAppointments,  props: true}
     ]
 })
 new Vue({

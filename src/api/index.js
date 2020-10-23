@@ -27,6 +27,17 @@ export default {
             }
         });
     },
+    fetchContacts() {
+        const querystring = {
+            maxRecords: 3,
+            view: "Grid view"
+        }
+        return axios.get(`${ROOT_URL}/Contacts?${qs.stringify(querystring)}`, {
+            headers: {
+                Authorization: `Bearer ${API_KEY}`
+            }
+        });
+    },
     createContact(data) {
         const { contact_name, contact_surname, contact_email, contact_phone } = data;
         let formData = {
@@ -58,6 +69,24 @@ export default {
         }
 
         return axios.post(`${ROOT_URL}/Appointments`, formData, {
+            headers: {
+                Authorization: `Bearer ${API_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        })
+    },
+    editAppointment(data) {
+        let formData = {
+            "fields": {
+                "appointment_date": data.appointment_date,
+                "appointment_postcode": data.appointment_postcode,
+                "contact_id": [data.contact_id],
+                "agent_id": [
+                  data.agent_id
+                ],
+            }
+        }
+        return axios.patch(`${ROOT_URL}/Appointments/recTY8wrOtcIKbztC`, formData, {
             headers: {
                 Authorization: `Bearer ${API_KEY}`,
                 'Content-Type': 'application/json'

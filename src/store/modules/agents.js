@@ -13,7 +13,6 @@ const actions = {
     async fetchAgents({ commit }) {
         const response = await api.fetchAgents();
         commit('setAgents', response.data);
-        console.log(response.data)
     }
 };
 

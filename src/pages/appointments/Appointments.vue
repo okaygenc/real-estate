@@ -16,6 +16,7 @@
                         <th scope="col">Contact Name</th>
                         <th scope="col">Contact Phone</th>
                         <th scope="col">Contact Surname</th>
+                        <th scope="col">Edit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,18 +32,21 @@
                         <td>{{appointment.fields.contact_name[0]}}</td>
                         <td>{{appointment.fields.contact_phone[0]}}</td>
                         <td>{{appointment.fields.contact_surname[0]}}</td>
+                        <td><router-link :to="{ name: 'edit-appointment', params: { appointment } }" type="button" class="btn btn-primary btn-sm">Edit</router-link></td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <h3 v-else class="d-flex justify-content-center mt-5">Loading...</h3>
+        <Loading v-else />
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import Loading from '../../components/Loading';
 export default {
     name: 'appointments',
+    components:{Loading},
     methods: mapActions(['fetchAppointments']),
     computed: mapGetters(['allAppointments']),
     created() {

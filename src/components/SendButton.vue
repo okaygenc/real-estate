@@ -1,6 +1,8 @@
 <template>
     <div class="row">
-            <div class="col-lg-12"> <button type="submit" class="btn btn-primary" @click="sendForm">{{text}}</button></div>
+        <div class="col-lg-12">
+            <button type="submit" class="btn btn-primary btn-lg" @click="sendForm">{{text}}</button>
+        </div>
     </div>
 </template>
 <script>

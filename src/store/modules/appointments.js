@@ -1,34 +1,46 @@
 import api from '../../api';
 import { router } from '../../main';
 
+const SORTERS = {
+    "oldestFirst": (a, b) => new Date(a.fields.appointment_date) - new Date(b.fields.appointment_date),
+    "newestFirst": (a, b) => new Date(b.fields.appointment_date) - new Date(a.fields.appointment_date),
+}
+
 const state = {
-    listOfAppointments: [],
+    listOfAppointments: null,
     appointmentStatus: '',
-    sortData: null,
-    sortType: null
+    filter: {
+        status: "",
+        agent: ""
+    },
+    sorter: null
 };
 
 const getters = {
-    getStatus:(state) => {
-        return state.appointmentStatus;
-    },
-    allAppointments: (state) => {
-        switch (state.sortType) {
-            case "sortAgents":
-                return state.listOfAppointments.filter(function(item) {
-                    return item.fields.agent_id[0] == state.sortData
-                });
-            case "sortDate":
-                return state.listOfAppointments.sort((a, b) => {
-                    if(state.sortData == 'oldToNew') {
-                        return  new Date(a.fields.appointment_date) - new Date(b.fields.appointment_date);
-                    } else {
-                        return  new Date(b.fields.appointment_date) - new Date(a.fields.appointment_date);
-                    }
-                });
-            default:
-                return state.listOfAppointments;
+    getStatus: (state) => state.appointmentStatus,
+    filteredAppointments: (state) => {
+        // Not loaded yet
+        if (!state.listOfAppointments) return null;
+
+        // Apply agent filter
+        let data = state.filter.agent === ""
+            ? state.listOfAppointments 
+            : state.listOfAppointments.filter(i => i.fields.agent_id[0] == state.filter.agent);
+
+        // Apply status filter
+        if (state.filter.status === "active") {
+            data = data.filter(i => new Date(i.fields.appointment_date) > new Date());
+        } else if (state.filter.status === "passive") {
+            data = data.filter(i => new Date(i.fields.appointment_date) <= new Date());
         }
+        
+        // Apply sort preference
+        if (state.sorter !== null) {
+            data = data.sort(SORTERS[state.sorter]);
+        }
+
+
+        return data;
     }
 };
 
@@ -47,30 +59,22 @@ const actions = {
         router.push('/appointments');
     },
     async editAppointment({ commit }, data) {
-        
         commit('setStatus', "pending");
         await api.editAppointment(data);
         commit('setStatus', "success");
         // programmatic navigation
         router.push('/appointments');
     },
-    filterAppointment({ commit }, data) {
-        commit('setSortName', data);
-    }
+    setFilter: ({ commit }, data) => commit('setFilter', data),
+    setSorter: ({ commit }, value) => commit('setSorter', value)
     /* eslint-enable */ 
 }
 
 const mutations = {
-    setAppointments:(state, records) => {
-        state.listOfAppointments = records;
-    },
-    setStatus:(state, status) => {
-        state.appointmentStatus = status;
-    },
-    setSortName:(state, data) => {
-        state.sortData = data.sortData;
-        state.sortType = data.sortType;
-    }
+    setAppointments: (state, records) => state.listOfAppointments = records,
+    setStatus: (state, status) => state.appointmentStatus = status,
+    setFilter: (state, { type, value }) => state.filter = { ...state.filter, [type]: value },
+    setSorter: (state, value) => state.sorter = value
 }
 
 export default {

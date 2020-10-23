@@ -1,64 +1,82 @@
 <template>
-    <div>
+    <form @submit="submit">
         <Loading v-if="getStatus === 'pending'" />
+
         <div v-else>
-        <EditAppointment v-if="formData && editForm" :allAgents="allAgents" :formData="formData" :allContacts="allContacts" @dateChange="dateChange" @onInput="onInput" />
-        <div v-else>
-            <div class="row">
-                <div class="col-lg-12">
-                    <h4>Create Appointment</h4>
-                    <hr>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Appointment Date</label>
-                        <date-picker v-model="formData.appointment_date" type="datetime" :show-second="false"></date-picker>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Select Agent</label>
-                        <select class="form-control" v-model="formData.agent_id">
-                            <option v-for="agent in allAgents.records" :agent="agent" :key="agent.fields.agent_id" :value="agent.id">{{agent.fields.agent_name}} {{agent.fields.agent_surname}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Contact Name</label>
-                        <input type="text" class="form-control" placeholder="Contact Name" name="contact_name" @input="onInput">
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Contact Surname</label>
-                        <input type="text" class="form-control" placeholder="Contact Surname"  name="contact_surname" @input="onInput">
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Contact Email</label>
-                        <input type="email" class="form-control" placeholder="Contact Email" name="contact_email" @input="onInput">
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Contact Phone</label>
-                        <input type="tel" class="form-control" placeholder="Contact Phone" name="contact_phone" @input="onInput">
-                    </div>
-                </div>
-            </div>
-            <Plan
-                v-if="formData.appointment_date && formData.appointment_postcode"
-                :date="formData.appointment_date"
-                :postCode="formData.appointment_postcode"
+            <EditAppointment 
+                v-if="formData && editForm"
+                :allAgents="allAgents"
+                :formData="formData"
+                :allContacts="allContacts"
+                @dateChange="dateChange"
+                @onInput="onInput" 
             />
-            <b>Appointment Postcode:</b>
-            <Map @postCodeReady="postCodeReady"/>
+        
+            <div v-else>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4>Create Appointment</h4>
+                        <hr>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label>Appointment Date</label>
+                            <date-picker 
+                                required
+                                v-model="formData.appointment_date"
+                                type="datetime"
+                                :show-second="false"
+                            ></date-picker>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="agent_id">Select Agent</label>
+                            <select id="agent_id" class="form-control" v-model="formData.agent_id" required>
+                                <option v-for="agent in allAgents.records" :agent="agent" :key="agent.fields.agent_id" :value="agent.id">{{agent.fields.agent_name}} {{agent.fields.agent_surname}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="contact_name">Contact Name</label>
+                            <input type="text" class="form-control" placeholder="Contact Name" id="contact_name" name="contact_name" @input="onInput" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="contact_surname">Contact Surname</label>
+                            <input type="text" class="form-control" placeholder="Contact Surname" id="contact_surname"  name="contact_surname" @input="onInput" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="contact_email">Contact Email</label>
+                            <input type="email" class="form-control" placeholder="Contact Email" id="contact_email" name="contact_email" @input="onInput" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="contact_phone">Contact Phone</label>
+                            <input type="tel" class="form-control" placeholder="Contact Phone" id="contact_phone" name="contact_phone" @input="onInput" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <b>Appointment Postcode:</b>
+                <Map @postCodeReady="postCodeReady"/>
+
+                <Plan
+                    v-if="formData.appointment_date && formData.appointment_postcode"
+                    :date="formData.appointment_date"
+                    :postCode="formData.appointment_postcode"
+                />
+
             </div>
-            <SendButton :text="editForm ? 'Edit Data' : 'Save Data'"  @sendForm="tryToSend"/>
+            
+            <SendButton :text="editForm ? 'Edit Data' : 'Save Data'" />
         </div>
-    </div>
+    </form>
 </template>
 
 <script>
@@ -110,16 +128,19 @@ export default {
             const { name, value } = e.target;
             this.$set(this.formData, name, value);
         },
-        tryToSend() {
-            const { appointment_date, appointment_postcode, agent_id, contact_name, contact_surname, contact_email, contact_phone } = this.formData;
+        submit(e) {
+            e.preventDefault();
 
-            if(appointment_date == null || agent_id == null || contact_name == null || contact_surname == null || contact_email == null || contact_phone == null) {
-                this.$swal({icon: 'warning', text: 'Please fill out all fields'});
-            } else if(appointment_postcode == null) {
-                this.$swal({icon: 'warning', text: 'Please select location from map'});
-            } else {
-                this.editForm ? this.editAppointment(this.formData) : this.createAppointment(this.formData);
+            // Validate 3rd party fields
+            if (!this.formData.appointment_date) {
+                return this.$swal({ icon: 'warning', text: 'Please pick an appointment date' });
+            } else if (this.formData.appointment_postcode == null) {
+                return this.$swal({ icon: 'warning', text: 'Please select appointment location on map' });
             }
+                
+            this.editForm 
+                ? this.editAppointment(this.formData)
+                : this.createAppointment(this.formData);
         },
         postCodeReady(code) {
             this.$set(this.formData, "appointment_postcode", code);
@@ -130,6 +151,7 @@ export default {
     },
     created() {
         this.fetchAgents();
+
         if(this.$route.params.appointment) {
             this.formData = this.$route.params.appointment.fields;
             this.$set(this.formData, "agent_id", this.formData.agent_id[0]);
@@ -140,6 +162,7 @@ export default {
     },
 }
 </script>
+
 <style>
     .mx-datepicker{
         width: 100%!important;

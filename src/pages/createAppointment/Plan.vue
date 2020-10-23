@@ -1,21 +1,33 @@
 <template>
-    <div>
-        <div v-if="loading">
-            Calculating travel distance and durations...
-        </div>
-        <div v-else>
-            <p class="info">Plan Info:</p>
-            <div>
-                Distance between agency and appointment location is <strong>{{ this.distanceTo }} (~{{ this.durationToText }} drive)</strong>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div v-if="loading">
+                Calculating travel distance and durations...
             </div>
-            <div>
-                Estimated time to leave office: <strong>{{ this.timeToLeaveText }}</strong>
-            </div>
-            <div>
-                Appointment duration: <strong>1 hour</strong>
-            </div>
-            <div>
-                Estimated time to back at office: <strong>{{ this.timeToBeBackText }}</strong>
+            <div v-else>
+                <h5 class="card-title">Appointment Plan:</h5>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Distance between agency and appointment
+                        <span class="badge badge-primary badge-pill">{{ this.distanceTo }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Duration from agency to appointment
+                        <span class="badge badge-primary badge-pill">{{ this.durationToText }} drive</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Agent should leave office at 
+                        <span class="badge badge-primary badge-pill">{{ this.timeToLeaveText }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Appointment duration
+                        <span class="badge badge-primary badge-pill">1 hour</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Agent will be back at office by
+                        <span class="badge badge-primary badge-pill">{{ this.timeToBeBackText }}</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

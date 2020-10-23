@@ -6,23 +6,44 @@
         </div>
         <div class="col-lg-4">
             <div class="form-group">
-                <label for="exampleInputEmail1">Appointment Dateedir</label>
-                <date-picker v-model="dateWithDefault" type="datetime" :show-second="false" ></date-picker>
+                <label for="appointment_date">Appointment Date</label>
+                <date-picker 
+                    v-model="dateWithDefault"
+                    id="appointment_date"
+                    type="datetime"
+                    :show-second="false"
+                ></date-picker>
             </div>
         </div>
         <div class="col-lg-4">
             <div class="form-group">
-                <label for="exampleFormControlSelect1">Select Agent</label>
-                <select class="form-control" name="agent_id"  @change="onInput($event)">
-                        <option v-for="agent in allAgents.records" :agent="agent" :key="agent.fields.agent_id" :value="agent.id" :selected="agent.id === formData.agent_id">{{agent.fields.agent_name}} {{agent.fields.agent_surname}}</option>
+                <label for="agent_id">Select Agent</label>
+                <select class="form-control" id="agent_id" name="agent_id"  @change="onInput($event)">
+                        <option 
+                            v-for="agent in allAgents.records"
+                            :agent="agent"
+                            :key="agent.fields.agent_id"
+                            :value="agent.id"
+                            :selected="agent.id === formData.agent_id"
+                        >
+                            {{agent.fields.agent_name}} {{agent.fields.agent_surname}}
+                        </option>
                 </select>
             </div>
         </div>
         <div class="col-lg-4">
             <div class="form-group">
-                <label for="exampleFormControlSelect1">Contacts</label>
-                <select class="form-control" name="contact_id"  @change="onInput($event)">
-                        <option v-for="contact in allContacts.records" :contact="contact" :key="contact.id" :value="contact.id" :selected="contact.id === formData.contact_id">{{contact.fields.contact_name}} {{contact.fields.contact_surname}}</option>
+                <label for="contact_id">Contact</label>
+                <select class="form-control" id="contact_id" name="contact_id" @change="onInput($event)">
+                    <option 
+                        v-for="contact in allContacts.records"
+                        :contact="contact"
+                        :key="contact.id"
+                        :value="contact.id"
+                        :selected="contact.id === formData.contact_id"
+                    >
+                        {{contact.fields.contact_name}} {{contact.fields.contact_surname}}
+                    </option>
                 </select>
             </div>
         </div>
@@ -32,15 +53,16 @@
 <script>
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
+
 export default {
     name: 'editAppointment',
-    props:[ 'allAgents', 'formData', 'allContacts'],
+    props: ['allAgents', 'formData', 'allContacts'],
     data() {
         return {
             appointmentDate: null
         }
     },
-    components:{DatePicker},
+    components: { DatePicker },
     computed: {
         dateWithDefault: {
             get() {
@@ -54,7 +76,7 @@ export default {
     watch: {
         // whenever Appointment Date changes, this function will run
         appointmentDate: function () {
-        this.$emit('dateChange', this.appointmentDate);
+            this.$emit('dateChange', this.appointmentDate);
         }
     },
     methods: {

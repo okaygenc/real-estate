@@ -103,7 +103,8 @@ export default {
                 contact_phone: null
             },
             editForm: false,
-            contact_id: ''
+            contact_id: '',
+            appointmentId: ''
         }
     },
     components: { DatePicker, Map, Plan,  SendButton, EditAppointment, Loading},
@@ -139,8 +140,8 @@ export default {
             }
                 
             this.editForm 
-                ? this.editAppointment(this.formData)
-                : this.createAppointment(this.formData);
+                ? this.editAppointment({formData: this.formData, id: this.appointmentId})
+                : this.createAppointment(this.formData, );
         },
         postCodeReady(code) {
             this.$set(this.formData, "appointment_postcode", code);
@@ -154,6 +155,7 @@ export default {
 
         if(this.$route.params.appointment) {
             this.formData = this.$route.params.appointment.fields;
+            this.appointmentId = this.$route.params.appointment.id;
             this.$set(this.formData, "agent_id", this.formData.agent_id[0]);
             this.$set(this.formData, "contact_id", this.formData.contact_id[0]);
             this.editForm = true;

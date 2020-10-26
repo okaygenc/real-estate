@@ -7,7 +7,6 @@ const API_KEY = "keyNSO2Is7ewJV2jV";
 export default {
     fetchAppointments() {
         const querystring = {
-            maxRecords: 3,
             view: "Grid view"
         }
         return axios.get(`${ROOT_URL}/Appointments?${qs.stringify(querystring)}`, {
@@ -18,7 +17,6 @@ export default {
     },
     fetchAgents() {
         const querystring = {
-            maxRecords: 3,
             view: "Grid view"
         }
         return axios.get(`${ROOT_URL}/Agents?${qs.stringify(querystring)}`, {
@@ -29,7 +27,6 @@ export default {
     },
     fetchContacts() {
         const querystring = {
-            maxRecords: 3,
             view: "Grid view"
         }
         return axios.get(`${ROOT_URL}/Contacts?${qs.stringify(querystring)}`, {
@@ -78,15 +75,15 @@ export default {
     editAppointment(data) {
         let formData = {
             "fields": {
-                "appointment_date": data.appointment_date,
-                "appointment_postcode": data.appointment_postcode,
-                "contact_id": [data.contact_id],
+                "appointment_date": data.formData.appointment_date,
+                "appointment_postcode": data.formData.appointment_postcode,
+                "contact_id": [data.formData.contact_id],
                 "agent_id": [
-                  data.agent_id
+                  data.formData.agent_id
                 ],
             }
         }
-        return axios.patch(`${ROOT_URL}/Appointments/recTY8wrOtcIKbztC`, formData, {
+        return axios.patch(`${ROOT_URL}/Appointments/${data.id}`, formData, {
             headers: {
                 Authorization: `Bearer ${API_KEY}`,
                 'Content-Type': 'application/json'
